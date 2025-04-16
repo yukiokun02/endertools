@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -13,8 +12,10 @@ const About = () => {
           
           <div className="prose prose-invert max-w-none">
             <p className="text-muted-foreground mb-6">
-              EnderTools provides essential tools for Minecraft server administrators to manage their resource packs efficiently. 
-              Our goal is to simplify the process of working with resource packs, making server administration easier and more enjoyable.
+              EnderTools is a premium service provided and maintained by EnderHOST, 
+              offering essential tools for Minecraft server administrators to manage their resource packs efficiently. 
+              Our goal is to simplify the process of working with resource packs, making server administration 
+              easier and more enjoyable with top-tier support from the EnderHOST team.
             </p>
             
             <h2 className="text-xl md:text-2xl font-semibold mt-8 mb-4">Our Tools</h2>
