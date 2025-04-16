@@ -1,6 +1,7 @@
 
 import { useEffect } from "react";
 import { PackagePlus, Link as LinkIcon, Hash } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
@@ -93,25 +94,30 @@ const Index = () => {
         </section>
         
         <section className="py-16 bg-gradient-to-b from-background via-primary/5 to-background/95">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Premium Minecraft Hosting Solution
-              </span>
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
-              Experience lag-free Minecraft hosting with EnderHOST. 
-              Get 24/7 support, instant setup, and competitive prices.
-            </p>
-            <a 
-              href="https://enderhost.in"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-md transition-all duration-300 
-                       hover:shadow-[0_0_15px_rgba(139,92,246,0.3)]"
-            >
-              Try EnderHOST
-            </a>
+          <div className="container mx-auto px-4">
+            <Card className="overflow-hidden backdrop-blur-xl bg-black/30 border border-white/10 shadow-[0_8px_32px_rgba(139,92,246,0.1)]
+                           transition-all duration-300 hover:shadow-[0_8px_32px_rgba(139,92,246,0.2)]">
+              <CardContent className="p-8 text-center">
+                <h2 className="text-2xl md:text-3xl font-bold mb-6">
+                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    Premium Minecraft Hosting Solution
+                  </span>
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
+                  Experience lag-free Minecraft hosting with EnderHOST. 
+                  Get 24/7 support, instant setup, and competitive prices.
+                </p>
+                <a 
+                  href="https://enderhost.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-8 py-3 bg-primary hover:bg-primary/90 text-white rounded-md transition-all duration-300 
+                           hover:shadow-[0_0_15px_rgba(139,92,246,0.3)]"
+                >
+                  Try EnderHOST
+                </a>
+              </CardContent>
+            </Card>
           </div>
         </section>
       </main>
