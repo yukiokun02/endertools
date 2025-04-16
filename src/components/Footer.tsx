@@ -17,7 +17,7 @@ const Footer = () => {
           
           <div className="flex items-center space-x-6">
             <Link 
-              to="https://github.com" 
+              to="https://github.com/yukiokun02" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"
@@ -27,7 +27,7 @@ const Footer = () => {
             </Link>
             
             <Link 
-              to="https://discord.com" 
+              to="https://discord.gg/bsGPB9VpUY" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-primary transition-colors"

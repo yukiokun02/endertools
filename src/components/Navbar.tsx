@@ -28,6 +28,14 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const scrollToTool = (toolId: string) => {
+    const element = document.getElementById(toolId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+    setIsMenuOpen(false);
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/40">
       <div className="container mx-auto px-4 py-3">
@@ -56,22 +64,22 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-48 bg-card border-border/50">
                 <DropdownMenuItem asChild className="flex items-center gap-2">
-                  <Link to="/#merger" className="cursor-pointer">
+                  <button onClick={() => scrollToTool("merger")} className="w-full cursor-pointer">
                     <PackagePlus size={16} />
                     <span>Resource Pack Merger</span>
-                  </Link>
+                  </button>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="flex items-center gap-2">
-                  <Link to="/#link-generator" className="cursor-pointer">
+                  <button onClick={() => scrollToTool("link-generator")} className="w-full cursor-pointer">
                     <LinkIcon size={16} />
                     <span>Link Generator</span>
-                  </Link>
+                  </button>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="flex items-center gap-2">
-                  <Link to="/#hash-generator" className="cursor-pointer">
+                  <button onClick={() => scrollToTool("hash-generator")} className="w-full cursor-pointer">
                     <Hash size={16} />
                     <span>SHA-1 Generator</span>
-                  </Link>
+                  </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

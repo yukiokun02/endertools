@@ -9,11 +9,11 @@ const About = () => {
       
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-6 text-primary">About MinePack</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-6 text-primary">About EnderTools</h1>
           
           <div className="prose prose-invert max-w-none">
             <p className="text-muted-foreground mb-6">
-              MinePack provides essential tools for Minecraft server administrators to manage their resource packs efficiently. 
+              EnderTools provides essential tools for Minecraft server administrators to manage their resource packs efficiently. 
               Our goal is to simplify the process of working with resource packs, making server administration easier and more enjoyable.
             </p>
             
