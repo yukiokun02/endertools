@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { 
@@ -34,10 +33,9 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo and name */}
-          <Link to="/" className="flex items-center space-x-2 text-primary">
-            <div className="font-bold text-xl">
-              <span className="text-accent">Mine</span>
-              <span className="text-primary">Pack</span>
+          <Link to="/" className="flex items-center space-x-2">
+            <div className="font-bold text-xl bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              EnderTools
             </div>
           </Link>
 
