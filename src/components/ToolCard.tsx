@@ -1,11 +1,11 @@
-
 import { useState } from "react";
-import { LucideIcon, Upload, X, Loader2, Check, AlertCircle } from "lucide-react";
+import { LucideIcon, Upload, X, Loader2, Check, AlertCircle, Download } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { mergeResourcePacks, generateDownloadLink, generateSHA1Hash } from "@/utils/api";
+import { Input } from "./ui/input";
 
 interface UploadedFile {
   name: string;
@@ -46,7 +46,6 @@ const ToolCard = ({
         newFiles[index] = { name: file.name, file };
         return newFiles;
       });
-      // Reset result when a new file is uploaded
       setResult(null);
     }
   };
@@ -60,7 +59,6 @@ const ToolCard = ({
         newFiles[index] = { name: file.name, file };
         return newFiles;
       });
-      // Reset result when a new file is dropped
       setResult(null);
     }
   };
@@ -71,12 +69,10 @@ const ToolCard = ({
       newFiles[index] = null;
       return newFiles;
     });
-    // Reset result when a file is removed
     setResult(null);
   };
 
   const handleProcessFiles = async () => {
-    // Validate that all required files are uploaded
     const allFilesUploaded = uploadedFiles.every(file => file !== null);
     if (!allFilesUploaded) {
       toast({
@@ -95,12 +91,10 @@ const ToolCard = ({
     try {
       let processingResult: string | Blob;
 
-      // Determine which tool to use based on the id
       switch (id) {
         case "merger":
           if (uploadedFiles[0]?.file && uploadedFiles[1]?.file) {
             processingResult = await mergeResourcePacks(uploadedFiles[0].file, uploadedFiles[1].file);
-            // Create download link for the merged pack
             const url = URL.createObjectURL(processingResult as Blob);
             setResult(url);
             toast({
@@ -211,7 +205,6 @@ const ToolCard = ({
     </div>
   );
 
-  // Render the result section based on the tool type
   const renderResult = () => {
     if (!result) return null;
 
