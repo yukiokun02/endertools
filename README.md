@@ -3,25 +3,58 @@
 
 A web application for Minecraft resource pack management, featuring a Resource Pack Merger, Download Link Generator, and SHA-1 Hash Generator.
 
-## Project Overview
+## Features
 
-This project provides Minecraft server administrators and players with tools to:
+1. **Resource Pack Merger**: Combine multiple Minecraft resource packs into a single pack.
+2. **Download Link Generator**: Create shareable download links for resource packs.
+3. **SHA-1 Hash Generator**: Calculate SHA-1 hashes required for Minecraft server configurations.
 
-1. **Merge Resource Packs**: Combine multiple resource packs into a single pack.
-2. **Generate Download Links**: Create shareable download links for resource packs.
-3. **Generate SHA-1 Hashes**: Calculate SHA-1 hashes required for Minecraft resource packs.
+## Quick Start (5-Minute Setup)
 
-## Deployment Guide
+This application is designed to run entirely in the browser with no backend required:
 
-### Option 1: Frontend-Only Deployment (Quick Start)
+```bash
+# 1. Clone the repository
+git clone <your-repo-url>
 
-This application currently includes browser-based implementations of all tools, so you can deploy it without a backend for testing and demonstration purposes:
+# 2. Navigate to project directory
+cd minecraft-tools
+
+# 3. Install dependencies
+npm install
+
+# 4. Build for production
+npm run build
+
+# 5. Serve the dist folder with a web server
+```
+
+That's it! Your application is now ready to use.
+
+## VPS Deployment Guide
+
+### Step 1: Prepare Your VPS
+
+Make sure you have Node.js (v16+) and npm installed:
+
+```bash
+# Update package lists
+sudo apt update
+
+# Install Node.js and npm
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Verify installation
+node -v
+npm -v
+```
+
+### Step 2: Clone and Build the Application
 
 ```bash
 # Clone the repository
 git clone <your-repo-url>
-
-# Navigate to the project directory
 cd minecraft-tools
 
 # Install dependencies
@@ -29,182 +62,126 @@ npm install
 
 # Build for production
 npm run build
-
-# The build output will be in the 'dist' directory, which you can serve with any static file server
 ```
 
-**Important Note**: The browser-based implementations have the following limitations:
-- Resource Pack Merger: Works fully in the browser but doesn't persist merged packs
-- Download Link Generator: Creates temporary URLs valid only during the session
-- SHA-1 Hash Generator: Works fully in the browser
+### Step 3: Set Up a Web Server
 
-### Option 2: Full Backend Integration (Recommended for Production)
+#### Option A: Using Nginx (Recommended for Production)
 
-For a production environment, replace the browser-based implementations with proper backend API calls:
+```bash
+# Install Nginx
+sudo apt install nginx
 
-1. **Set up your backend server**:
-   - Create a Node.js/Express server or use any other backend technology
-   - Set up CORS to allow requests from your frontend
-
-2. **Update API Endpoints**:
-   Open `src/utils/api.ts` and replace the current implementations with API calls to your backend:
-
-```typescript
-// Example updated mergeResourcePacks function with backend API
-export const mergeResourcePacks = async (file1: File, file2: File): Promise<Blob> => {
-  const formData = new FormData();
-  formData.append('file1', file1);
-  formData.append('file2', file2);
-  
-  const response = await fetch('https://your-backend-url.com/api/merge', {
-    method: 'POST',
-    body: formData,
-  });
-  
-  if (!response.ok) {
-    throw new Error('Failed to merge resource packs');
-  }
-  
-  return await response.blob();
-};
+# Create a site configuration
+sudo nano /etc/nginx/sites-available/minecraft-tools
 ```
 
-## Backend Implementation Guide
+Add this configuration (replace `yourdomain.com` with your actual domain):
 
-The frontend expects these API endpoints:
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    
+    root /path/to/minecraft-tools/dist;
+    index index.html;
+    
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+    
+    # Optional: Add caching for static assets
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
+    }
+}
+```
 
-1. **Resource Pack Merger**: `/api/merge`
-   - Method: POST
-   - Accepts: Two resource pack files (multipart/form-data)
-   - Returns: A merged resource pack file (application/zip)
+Enable the site and restart Nginx:
 
-2. **Download Link Generator**: `/api/generate-link`
-   - Method: POST
-   - Accepts: Resource pack file (multipart/form-data)
-   - Returns: JSON with a download link URL
+```bash
+sudo ln -s /etc/nginx/sites-available/minecraft-tools /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
 
-3. **SHA-1 Hash Generator**: `/api/generate-sha1`
-   - Method: POST
-   - Accepts: Resource pack file (multipart/form-data)
-   - Returns: JSON with the SHA-1 hash
+#### Option B: Using a Simple HTTP Server for Testing
 
-## VPS Deployment Instructions
+```bash
+# Install a simple HTTP server globally
+npm install -g serve
 
-To deploy this application on your VPS:
+# Serve the application (from the project directory)
+serve -s dist -p 8080
+```
 
-1. **Install Node.js and npm** (if not already installed):
-   ```bash
-   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-   sudo apt-get install -y nodejs
-   ```
+### Step 4: Set Up SSL (Recommended)
 
-2. **Clone the repository**:
-   ```bash
-   git clone <your-repo-url>
-   cd minecraft-tools
-   ```
+```bash
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx
 
-3. **Install dependencies and build**:
-   ```bash
-   npm install
-   npm run build
-   ```
+# Obtain and configure SSL certificate
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+```
 
-4. **Set up a web server**:
-   
-   Using Nginx (recommended):
-   ```bash
-   sudo apt install nginx
-   
-   # Create a new site configuration
-   sudo nano /etc/nginx/sites-available/minecraft-tools
-   ```
+### Step 5: Keep the Server Running (Optional)
 
-   Add this configuration:
-   ```
-   server {
-       listen 80;
-       server_name your-domain.com;
-       
-       root /path/to/your/project/dist;
-       index index.html;
-       
-       location / {
-           try_files $uri $uri/ /index.html;
-       }
-       
-       # If you add a backend API, add a location for it:
-       # location /api {
-       #     proxy_pass http://localhost:5000;
-       #     proxy_http_version 1.1;
-       #     proxy_set_header Upgrade $http_upgrade;
-       #     proxy_set_header Connection 'upgrade';
-       #     proxy_set_header Host $host;
-       #     proxy_cache_bypass $http_upgrade;
-       # }
-   }
-   ```
+If you're using the simple HTTP server instead of Nginx, you might want to keep it running:
 
-   Enable the site:
-   ```bash
-   sudo ln -s /etc/nginx/sites-available/minecraft-tools /etc/nginx/sites-enabled/
-   sudo nginx -t
-   sudo systemctl restart nginx
-   ```
+```bash
+# Install PM2 process manager
+npm install -g pm2
 
-5. **Set up SSL with Let's Encrypt** (recommended):
-   ```bash
-   sudo apt install certbot python3-certbot-nginx
-   sudo certbot --nginx -d your-domain.com
-   ```
+# Start the server with PM2
+pm2 start "serve -s dist -p 8080" --name minecraft-tools
 
-6. **If you implement a backend** (optional):
-   - Create a Node.js/Express server
-   - Set up a process manager like PM2:
-     ```bash
-     npm install -g pm2
-     cd /path/to/your/backend
-     pm2 start app.js --name minecraft-tools-api
-     pm2 save
-     pm2 startup
-     ```
+# Set PM2 to start on system boot
+pm2 startup
+pm2 save
+```
+
+## How It Works
+
+This application uses browser-based implementations of all tools to eliminate the need for a backend:
+
+- **Resource Pack Merger**: Uses JSZip for client-side ZIP file manipulation
+- **Download Link Generator**: Creates temporary object URLs valid during the browser session
+- **SHA-1 Hash Generator**: Calculates hashes directly in the browser using crypto-browserify
+
+## Limitations of Client-Side Mode
+
+The current implementation has some limitations:
+
+1. **Download links are temporary**: They work only during the current browser session.
+2. **No persistent storage**: Merged resource packs are not saved anywhere.
+3. **Processing large files**: Extremely large resource packs may cause browser performance issues.
+
+## Backend Integration (Optional)
+
+If you need permanent links and better performance, you can integrate this with a Node.js backend:
+
+1. Create a Node.js/Express server in a new directory (e.g., `server/`)
+2. Implement the following API endpoints:
+   - `/api/merge` - For merging resource packs
+   - `/api/generate-link` - For creating permanent download links
+   - `/api/generate-sha1` - For generating SHA-1 hashes
+3. Update `src/utils/api.ts` to call these endpoints instead of using browser-based implementations
+4. Build and deploy both the frontend and backend
+
+## Troubleshooting
+
+### Common Issues
+
+- **"ReferenceError: global is not defined"**: This could happen in some browsers. The app includes polyfills to fix this, but if you encounter it, make sure you're using the latest browser version.
+- **"Failed to load resource pack"**: Ensure your ZIP files are valid Minecraft resource packs.
+- **Slow performance with large files**: Try using smaller resource packs or consider setting up the optional backend.
+
+### Getting Help
+
+If you need assistance, please file an issue on the GitHub repository or contact EnderHOST support.
 
 ## Powered by EnderHOST
 
-This project is maintained and provided by EnderHOST, a premium Minecraft server hosting solution. Visit [EnderHOST](https://enderhost.in) for more information.
-
-## Project info
-
-**URL**: https://lovable.dev/projects/2926da1b-b544-4d72-9b47-7e7ab27381df
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/2926da1b-b544-4d72-9b47-7e7ab27381df) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+This project is maintained and provided by EnderHOST, a premium Minecraft server hosting solution. Visit [EnderHOST](https://enderhost.in) for more information about our hosting services.

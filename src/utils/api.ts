@@ -9,7 +9,6 @@ import { createHash } from 'crypto-browserify';
 // Resource Pack Merger
 export const mergeResourcePacks = async (file1: File, file2: File): Promise<Blob> => {
   // Frontend implementation that works without a backend
-  // This will be replaced with your actual backend call
   try {
     // Load the resource packs
     const zip1 = await JSZip.loadAsync(file1);
@@ -23,6 +22,9 @@ export const mergeResourcePacks = async (file1: File, file2: File): Promise<Blob
       if (!zip1.files[path].dir) {
         const content = await zip1.files[path].async('arraybuffer');
         mergedZip.file(path, content);
+      } else {
+        // Create directory structure
+        mergedZip.folder(path);
       }
     }
     
@@ -31,13 +33,19 @@ export const mergeResourcePacks = async (file1: File, file2: File): Promise<Blob
       if (!zip2.files[path].dir) {
         const content = await zip2.files[path].async('arraybuffer');
         mergedZip.file(path, content);
+      } else if (!mergedZip.files[path]) {
+        // Create directory structure if it doesn't exist
+        mergedZip.folder(path);
       }
     }
     
     // Generate merged zip
     return await mergedZip.generateAsync({
       type: 'blob',
-      compression: 'DEFLATE'
+      compression: 'DEFLATE',
+      compressionOptions: {
+        level: 9 // Best compression
+      }
     });
   } catch (error) {
     console.error('Error merging resource packs:', error);
@@ -48,18 +56,18 @@ export const mergeResourcePacks = async (file1: File, file2: File): Promise<Blob
 // Download Link Generator
 export const generateDownloadLink = async (file: File): Promise<string> => {
   // Frontend implementation that works without a backend
-  // This creates a temporary object URL that will be valid during the session
-  // In production, replace with your backend API call
   try {
-    // In a real implementation, you would upload this to your server
-    // and return a permanent URL
+    // In a real backend implementation, you would upload this to your server
+    // and return a permanent URL. For now we'll use object URLs that work
+    // for the current session.
     const objectUrl = URL.createObjectURL(file);
     
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Simulate API delay for realistic behavior
+    await new Promise(resolve => setTimeout(resolve, 500));
     
-    // Return the temporary URL (this will only work during the current session)
-    // Replace this with your actual API endpoint in production
+    // Add warning about URL expiration
+    console.info('Warning: This URL will only be valid for the current browser session.');
+    
     return objectUrl;
   } catch (error) {
     console.error('Error generating download link:', error);
@@ -70,7 +78,6 @@ export const generateDownloadLink = async (file: File): Promise<string> => {
 // SHA-1 Hash Generator
 export const generateSHA1Hash = async (file: File): Promise<string> => {
   // Frontend implementation that works without a backend
-  // This will be replaced with your actual backend call
   try {
     // Read the file
     const arrayBuffer = await file.arrayBuffer();
@@ -81,8 +88,8 @@ export const generateSHA1Hash = async (file: File): Promise<string> => {
     hash.update(buffer);
     const sha1Hash = hash.digest('hex');
     
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 800));
+    // Simulate API delay for realistic behavior
+    await new Promise(resolve => setTimeout(resolve, 400));
     
     return sha1Hash;
   } catch (error) {

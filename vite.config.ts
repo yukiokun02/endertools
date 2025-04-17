@@ -28,4 +28,25 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    // Optimize bundle size
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: false, // Keep console logs for debugging
+        drop_debugger: true
+      }
+    },
+    // Improve build performance
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['@/components/ui'],
+          jszip: ['jszip'],
+          crypto: ['crypto-browserify']
+        }
+      }
+    }
+  }
 })
