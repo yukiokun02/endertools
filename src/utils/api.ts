@@ -3,80 +3,90 @@
  * API integration utilities for Minecraft resource pack tools
  */
 
+import JSZip from 'jszip';
+import { createHash } from 'crypto-browserify';
+
 // Resource Pack Merger
 export const mergeResourcePacks = async (file1: File, file2: File): Promise<Blob> => {
-  // This is a placeholder for your backend implementation
-  // Replace this with actual API call to your backend
-  
-  const formData = new FormData();
-  formData.append('file1', file1);
-  formData.append('file2', file2);
-  
+  // Frontend implementation that works without a backend
+  // This will be replaced with your actual backend call
   try {
-    const response = await fetch('/api/merge', {
-      method: 'POST',
-      body: formData,
-    });
+    // Load the resource packs
+    const zip1 = await JSZip.loadAsync(file1);
+    const zip2 = await JSZip.loadAsync(file2);
     
-    if (!response.ok) {
-      throw new Error('Failed to merge resource packs');
+    // Create new merged zip
+    const mergedZip = new JSZip();
+    
+    // Add files from first pack
+    for (const path in zip1.files) {
+      if (!zip1.files[path].dir) {
+        const content = await zip1.files[path].async('arraybuffer');
+        mergedZip.file(path, content);
+      }
     }
     
-    return await response.blob();
+    // Add files from second pack (overwriting duplicates)
+    for (const path in zip2.files) {
+      if (!zip2.files[path].dir) {
+        const content = await zip2.files[path].async('arraybuffer');
+        mergedZip.file(path, content);
+      }
+    }
+    
+    // Generate merged zip
+    return await mergedZip.generateAsync({
+      type: 'blob',
+      compression: 'DEFLATE'
+    });
   } catch (error) {
     console.error('Error merging resource packs:', error);
-    throw error;
+    throw new Error('Failed to merge resource packs. Please ensure both files are valid Minecraft resource packs.');
   }
 };
 
 // Download Link Generator
 export const generateDownloadLink = async (file: File): Promise<string> => {
-  // This is a placeholder for your backend implementation
-  // Replace this with actual API call to your backend
-  
-  const formData = new FormData();
-  formData.append('file', file);
-  
+  // Frontend implementation that works without a backend
+  // This creates a temporary object URL that will be valid during the session
+  // In production, replace with your backend API call
   try {
-    const response = await fetch('/api/generate-link', {
-      method: 'POST',
-      body: formData,
-    });
+    // In a real implementation, you would upload this to your server
+    // and return a permanent URL
+    const objectUrl = URL.createObjectURL(file);
     
-    if (!response.ok) {
-      throw new Error('Failed to generate download link');
-    }
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
-    const data = await response.json();
-    return data.downloadLink;
+    // Return the temporary URL (this will only work during the current session)
+    // Replace this with your actual API endpoint in production
+    return objectUrl;
   } catch (error) {
     console.error('Error generating download link:', error);
-    throw error;
+    throw new Error('Failed to generate download link. Please try again.');
   }
 };
 
 // SHA-1 Hash Generator
 export const generateSHA1Hash = async (file: File): Promise<string> => {
-  // This is a placeholder for your backend implementation
-  // Replace this with actual API call to your backend
-  
-  const formData = new FormData();
-  formData.append('file', file);
-  
+  // Frontend implementation that works without a backend
+  // This will be replaced with your actual backend call
   try {
-    const response = await fetch('/api/generate-sha1', {
-      method: 'POST',
-      body: formData,
-    });
+    // Read the file
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = new Uint8Array(arrayBuffer);
     
-    if (!response.ok) {
-      throw new Error('Failed to generate SHA-1 hash');
-    }
+    // Calculate SHA-1 hash using crypto-browserify
+    const hash = createHash('sha1');
+    hash.update(buffer);
+    const sha1Hash = hash.digest('hex');
     
-    const data = await response.json();
-    return data.sha1Hash;
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    return sha1Hash;
   } catch (error) {
     console.error('Error generating SHA-1 hash:', error);
-    throw error;
+    throw new Error('Failed to generate SHA-1 hash. Please try again.');
   }
 };
