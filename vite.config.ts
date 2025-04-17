@@ -14,9 +14,15 @@ export default defineConfig({
       'buffer': 'buffer',
     }
   },
+  define: {
+    // Fix for "global is not defined" error
+    global: 'globalThis',
+  },
+  server: {
+    port: 8080
+  },
   optimizeDeps: {
     esbuildOptions: {
-      // Node.js global to browser globalThis
       define: {
         global: 'globalThis',
       },

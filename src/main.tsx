@@ -1,5 +1,5 @@
 
-import './polyfills';
+import './polyfills'; // This must be the first import
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
