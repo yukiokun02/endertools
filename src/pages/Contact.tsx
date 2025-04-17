@@ -38,7 +38,7 @@ const Contact = () => {
               <Mail className="h-10 w-10 text-primary mb-4" />
               <h2 className="text-lg font-semibold mb-2">Email</h2>
               <p className="text-muted-foreground text-center">
-                contact@minepack.example
+                support@enderhost.in
               </p>
             </div>
             
@@ -46,18 +46,28 @@ const Contact = () => {
                           transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_15px_rgba(139,92,246,0.15)]">
               <Github className="h-10 w-10 text-primary mb-4" />
               <h2 className="text-lg font-semibold mb-2">GitHub</h2>
-              <p className="text-muted-foreground text-center">
+              <a 
+                href="https://github.com/yukiokun02" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-muted-foreground text-center hover:text-primary transition-colors"
+              >
                 Follow our open source projects
-              </p>
+              </a>
             </div>
             
             <div className="flex flex-col items-center p-6 bg-card rounded-lg border border-border/50 
                           transition-all duration-300 hover:border-primary/50 hover:shadow-[0_0_15px_rgba(139,92,246,0.15)]">
               <MessageCircle className="h-10 w-10 text-primary mb-4" />
               <h2 className="text-lg font-semibold mb-2">Discord</h2>
-              <p className="text-muted-foreground text-center">
+              <a 
+                href="https://discord.gg/bsGPB9VpUY" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-muted-foreground text-center hover:text-primary transition-colors"
+              >
                 Join our community server
-              </p>
+              </a>
             </div>
           </div>
           

@@ -40,14 +40,12 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/40">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          {/* Logo and name */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="font-bold text-xl bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               EnderTools
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             <Link to="/" className="text-foreground hover:text-primary transition-colors flex items-center gap-1.5">
               <Home size={16} />
@@ -91,11 +89,10 @@ const Navbar = () => {
             
             <Link to="/contact" className="text-foreground hover:text-primary transition-colors flex items-center gap-1.5">
               <Mail size={16} />
-              <span>Contact</span>
+              <span>Contact Us</span>
             </Link>
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <Button variant="ghost" onClick={toggleMenu} className="p-2">
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -103,7 +100,6 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
         <div
           className={cn(
             "md:hidden transition-all duration-300 ease-in-out overflow-hidden",
@@ -168,7 +164,7 @@ const Navbar = () => {
               onClick={toggleMenu}
             >
               <Mail size={18} />
-              <span>Contact</span>
+              <span>Contact Us</span>
             </Link>
           </div>
         </div>
